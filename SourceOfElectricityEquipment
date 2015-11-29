@@ -1,0 +1,76 @@
+@Controller
+@RequestMapping("/modell")
+public class SourceOfElectricityEquipment { 
+	
+	@Autowired
+	private CompanyDAO companyDAO;
+	
+	@Autowired
+	private CompanyCollectionSizeDAO companyCollectionSizeDAO;
+	
+	@Autowired
+	private CompanyCollectionTypeDAO companyCollectionTypeDAO;
+	
+	@Autowired
+	private CompanyCollectionOfModelsDAO companyCollectionOfModelsDAO;
+	
+	@Autowired
+	@Qualifier("collectionFormValidator")
+	private org.springframework.validation.Validator validator;
+	    
+	@InitBinder
+	private void initBinder(WebDataBinder binder) {
+		binder.setValidator(validator);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public String initForm(Model model) {
+		CollectionForm collectionForm = new CollectionForm();
+		model.addAttribute("collectionForm", collectionForm);
+		initModelList(model);
+		return "modell";
+	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public String submitForm(Model model, @Validated CollectionForm collectionForm, BindingResult result) {
+		model.addAttribute("collectionForm", collectionForm);
+		String returnVal = "modell";
+		if(result.hasErrors()) {
+			initModelList(model);
+			returnVal = "modell";
+		} else {
+			initSourceResult( model, collectionForm);
+			
+		}		
+		return returnVal;
+	}
+
+
+	
+	
+	private void initModelList(Model model) {
+		
+		List<CompanyCollectionType> listType = companyCollectionTypeDAO.list();
+		
+		List<CompanyCollectionSize> listSize = companyCollectionSizeDAO.list();
+		
+		List<Company> listCompanys = companyDAO.list();
+		
+		model.addAttribute("listType", listType);
+		
+		model.addAttribute("listofcompanys", listCompanys);
+		
+		model.addAttribute("listSize", listSize);
+
+	}
+	
+	
+	@SuppressWarnings("unused")
+	private void initSourceResult(Model model, CollectionForm collectionForm){
+		
+		List<CompanyCollectionOfModel>listOfModellSourse = companyCollectionOfModelsDAO.getModels(collectionForm);
+		model.addAttribute("listOfModellSourse", listOfModellSourse);
+		
+	}
+
+}
