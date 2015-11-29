@@ -1,0 +1,80 @@
+package com.my.findmodell.dao;
+
+
+import com.my.findmodell.model.CompanyCollectionOfModel;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+
+import com.my.findmodell.model.CollectionForm;
+
+public class CompanyCollectionOfModelsDAOImpl implements CompanyCollectionOfModelsDAO {
+	
+	
+	private JdbcTemplate jdbcTemplate;
+	
+	public CompanyCollectionOfModelsDAOImpl(DataSource dataSource) {
+		jdbcTemplate = new JdbcTemplate(dataSource);
+	}
+	
+	public List<CompanyCollectionOfModel> getModels(CollectionForm inputForm){
+		
+		
+		String sql = "select c.company_name , m.MODELL_NAME, mz.modell_size_name, m.MODELL_PRIS, m.MODELL_INFO "
+				+ "from companys c, modells m , modell_sizes mz where c.company_id = m.company_id and m.modell_size_id = mz.modell_size_id";
+		
+		
+		
+		if(!inputForm.getCompany_id().equals("*")){
+			
+			String companyValue = " and c.company_id = ";
+			companyValue +=  inputForm.getCompany_id();
+			
+			sql += companyValue;
+		}
+		
+		if(!inputForm.getModell_size_id().equals("*")){
+			
+			String modell_sizeValue = " and m.modell_size_id = ";
+			modell_sizeValue += inputForm.getModell_size_id();
+			sql += modell_sizeValue;
+			
+		}
+		
+		
+		sql += "  and m.modell_type_id =  ";
+		
+		sql += inputForm.getModell_type_id(); 
+		
+		
+		String groupby = " group by m.MODELL_NAME";
+		
+		sql += groupby;
+		
+		
+		List<CompanyCollectionOfModel> listCompanyCollectionOfModel = jdbcTemplate.query(sql, new RowMapper<CompanyCollectionOfModel>() {
+		
+		@Override
+		public  CompanyCollectionOfModel mapRow(ResultSet rs, int rowNum) throws SQLException {
+			CompanyCollectionOfModel aCompanyCollectionOfModel = new CompanyCollectionOfModel();
+			aCompanyCollectionOfModel.setCompany_name(rs.getString("company_name"));
+			aCompanyCollectionOfModel.setModell_name(rs.getString("modell_name"));
+			aCompanyCollectionOfModel.setModell_size_name(rs.getString("modell_size_name"));
+			aCompanyCollectionOfModel.setModell_pris(rs.getString("modell_pris"));
+			aCompanyCollectionOfModel.setModell_info(rs.getString("modell_info"));
+			
+			return aCompanyCollectionOfModel;
+			}
+		});
+		
+		return listCompanyCollectionOfModel;
+		
+	}
+
+}
