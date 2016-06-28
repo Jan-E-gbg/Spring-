@@ -1,5 +1,6 @@
 @Controller
 @RequestMapping("/modell")
+@SessionAttributes("collectionForm")
 public class SourceOfElectricityEquipment { 
 	
 	@Autowired
@@ -32,7 +33,7 @@ public class SourceOfElectricityEquipment {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public String submitForm(Model model, @Validated CollectionForm collectionForm, BindingResult result) {
+	public String submitForm(@ModelAttribute("collectionForm") @Validated CollectionForm collectionForm, BindingResult result,SessionStatus status, Model model) {
 		model.addAttribute("collectionForm", collectionForm);
 		String returnVal = "modell";
 		if(result.hasErrors()) {
