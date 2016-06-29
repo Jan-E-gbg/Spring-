@@ -35,12 +35,13 @@ public class SourceOfElectricityEquipment {
 	@RequestMapping(method = RequestMethod.POST)
 	public String submitForm(@ModelAttribute("collectionForm") @Validated CollectionForm collectionForm, BindingResult result,SessionStatus status, Model model) {
 		model.addAttribute("collectionForm", collectionForm);
-		String returnVal = "modell";
+		String returnVal = "result-page";
 		if(result.hasErrors()) {
 			initModelList(model);
 			returnVal = "modell";
 		} else {
 			initSourceResult( model, collectionForm);
+			collectionForm.setListOfResultSource( getSourceResult(collectionForm));
 			
 		}		
 		return returnVal;
