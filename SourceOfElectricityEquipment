@@ -1,6 +1,7 @@
 @Controller
 @RequestMapping("/modell")
 @SessionAttributes("collectionForm")
+@SuppressWarnings("unused")
 public class SourceOfElectricityEquipment { 
 	
 	@Autowired
@@ -40,9 +41,7 @@ public class SourceOfElectricityEquipment {
 			initModelList(model);
 			returnVal = "modell";
 		} else {
-			initSourceResult( model, collectionForm);
 			collectionForm.setListOfResultSource( getSourceResult(collectionForm));
-			
 		}		
 		return returnVal;
 	}
@@ -67,7 +66,6 @@ public class SourceOfElectricityEquipment {
 	}
 	
 	
-	@SuppressWarnings("unused")
 	private void initSourceResult(Model model, CollectionForm collectionForm){
 		
 		List<CompanyCollectionOfModel>listOfModellSourse = companyCollectionOfModelsDAO.getModels(collectionForm);
