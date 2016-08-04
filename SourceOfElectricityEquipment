@@ -20,10 +20,6 @@ public class SourceOfElectricityEquipment {
 	@Qualifier("collectionFormValidator")
 	private org.springframework.validation.Validator validator;
 	    
-	@InitBinder
-	private void initBinder(WebDataBinder binder) {
-		binder.setValidator(validator);
-	}
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public String initForm(Model model) {
@@ -34,14 +30,16 @@ public class SourceOfElectricityEquipment {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public String submitForm(@ModelAttribute("collectionForm") @Validated CollectionForm collectionForm, BindingResult result,SessionStatus status, Model model) {
+	public String submitForm(@ModelAttribute("collectionForm")CollectionForm collectionForm, BindingResult result, @ModelAttribute("orderForm")OrderForm orderForm,@ModelAttribute("orderForm")OrderForm orderForm, Model model) {
 		model.addAttribute("collectionForm", collectionForm);
-		String returnVal = "result-page";
+		String returnVal = "order-page";
+		new CollectionFormValidator().validate(collectionForm, result);
 		if(result.hasErrors()) {
 			initModelList(model);
 			returnVal = "modell";
 		} else {
-			collectionForm.setListOfResultSource( getSourceResult(collectionForm));
+			orderForm.setListOfResultSource( getSourceResult(collectionForm));
+			model.addAttribute("orderForm",orderForm);
 		}		
 		return returnVal;
 	}
