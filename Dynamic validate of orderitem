@@ -26,16 +26,12 @@ public class OrderFormValidator implements Validator{
 			
 			if(oi.getAmountOf().trim().length() > 0){
 				
-				
 			    try{
 			        Integer.parseInt(oi.getAmountOf());
 			        
 			    }catch(NumberFormatException ex){ // handle your exception
-			    	System.out.println("orderItemList[" + index + "].amountOf");
 			        errors.rejectValue("orderItemList[" + index + "].amountOf", "Just allow numerics","Just allow numerics");
-			        
 			    }
-
 
 			}
 		}
