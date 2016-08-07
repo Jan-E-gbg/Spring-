@@ -16,11 +16,7 @@ public class SourceOfElectricityEquipment {
 	@Autowired
 	private CompanyCollectionOfModelsDAO companyCollectionOfModelsDAO;
 	
-	@Autowired
-	@Qualifier("collectionFormValidator")
-	private org.springframework.validation.Validator validator;
 	    
-	
 	@RequestMapping(method = RequestMethod.GET)
 	public String initForm(Model model) {
 		CollectionForm collectionForm = new CollectionForm();
@@ -30,17 +26,15 @@ public class SourceOfElectricityEquipment {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public String submitForm(@ModelAttribute("collectionForm")CollectionForm collectionForm, BindingResult result, @ModelAttribute("orderForm")OrderForm orderForm,@ModelAttribute("orderForm")OrderForm orderForm, Model model) {
+	public String submitForm(@ModelAttribute("collectionForm") CollectionForm collectionForm, BindingResult result, Model model ) {
 		model.addAttribute("collectionForm", collectionForm);
-		String returnVal = "order-page";
+		String returnVal = "redirect:/order";
+		//String returnVal = "result-page";'
 		new CollectionFormValidator().validate(collectionForm, result);
 		if(result.hasErrors()) {
 			initModelList(model);
 			returnVal = "modell";
-		} else {
-			orderForm.setListOfResultSource( getSourceResult(collectionForm));
-			model.addAttribute("orderForm",orderForm);
-		}		
+		} 	
 		return returnVal;
 	}
 
