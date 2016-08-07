@@ -1,0 +1,45 @@
+package com.my.orders;
+
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
+
+import com.my.findmodell.model.CollectionForm;
+
+public class OrderFormValidator implements Validator{
+	
+	public boolean supports(Class<?> paramClass){
+		return OrderForm.class.equals(paramClass);
+	}
+	
+	public void validate( Object obj, Errors errors) {
+		
+		OrderForm orderform = (OrderForm) (obj);
+		
+		if(orderform == null)
+		return;
+		
+		int size = orderform.getOrderItemList().size();
+		
+		for(int index = 0; index < size;index++){
+			
+			OrderItem oi = orderform.getOrderItemList().get(index);
+			
+			if(oi.getAmountOf().trim().length() > 0){
+				
+				
+			    try{
+			        Integer.parseInt(oi.getAmountOf());
+			        
+			    }catch(NumberFormatException ex){ // handle your exception
+			    	System.out.println("orderItemList[" + index + "].amountOf");
+			        errors.rejectValue("orderItemList[" + index + "].amountOf", "Just allow numerics","Just allow numerics");
+			        
+			    }
+
+
+			}
+		}
+		
+	}
+
+}
