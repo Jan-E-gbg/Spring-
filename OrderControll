@@ -1,0 +1,80 @@
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+
+import com.my.findmodell.dao.CompanyCollectionOfModelsDAO;
+import com.my.findmodell.model.CollectionForm;
+import com.my.findmodell.model.CompanyCollectionOfModel;
+import com.my.orders.OrderForm;
+import com.my.orders.OrderFormValidator;
+
+
+@SuppressWarnings("unused")
+@Controller
+@RequestMapping("/order")
+@SessionAttributes({"collectionForm","orderForm"})
+public class OrderControll {
+	
+	
+	@Autowired
+	@Qualifier("orderFormValidator")
+	private org.springframework.validation.Validator validator;
+	
+	@Autowired
+	private CompanyCollectionOfModelsDAO companyCollectionOfModelsDAO;
+	
+	
+
+	
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public String initForm(@ModelAttribute("collectionForm") CollectionForm collectionForm, Model model) {
+		OrderForm orderForm = new OrderForm(getSourceResult(collectionForm));
+		model.addAttribute("orderForm", orderForm);
+		//initModelList(model);
+		return "order";
+	} 
+	
+
+
+
+	@RequestMapping(method = RequestMethod.POST)
+	public String submitForm(@ModelAttribute OrderForm orderForm, BindingResult result, Model model ) {
+		new OrderFormValidator().validate(orderForm, result);
+		model.addAttribute("orderForm", orderForm);
+		String returnVal = "order";
+		if(result.hasErrors()) {
+			returnVal = "order";
+		} else {
+			
+		}		
+		return returnVal;
+	}
+	
+	@RequestMapping(params = "source", method = RequestMethod.POST)
+	public String newSource(Model model , SessionStatus status){
+		String returnVal = "redirect:/modell";
+		status.setComplete();
+		
+		return returnVal;
+		
+	}
+	
+	private List <CompanyCollectionOfModel> getSourceResult(CollectionForm collectionForm){
+		return companyCollectionOfModelsDAO.getModels(collectionForm);
+	}
+	
+	
+}
