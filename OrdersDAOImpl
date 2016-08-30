@@ -1,0 +1,22 @@
+public class OrdersDAOImpl implements OrdersDAO{
+	
+private SimpleJdbcCall simpleJdbcCall;	
+
+	
+	public OrdersDAOImpl(DataSource dataSource) {
+		this.simpleJdbcCall = new SimpleJdbcCall(dataSource);
+	}
+	
+	
+	public int getOrderId(int cust_id){
+	 
+		this.simpleJdbcCall.withProcedureName("insertOrder");
+		SqlParameterSource in = new MapSqlParameterSource()
+	        .addValue("in_cust_id", cust_id);
+		Map<String,Object> out = simpleJdbcCall.execute(in);
+		
+		return Integer.parseInt(String.valueOf(out.get("out_new_order_id")));
+	 
+	}
+
+}
