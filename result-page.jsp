@@ -13,23 +13,23 @@
 <table border="1">
 	<tr>
 		<th>
-		Company
+			Company
 		</th>
 		<th>
-		  Namn 
+		  	Name
 		</th> 
-        <th>
-         Inches   
-        </th>
-        <th>
-         Pris
-        </th>
-        <th>
-         Antal   
-        </th>
+        	<th>
+         		Inches   
+        	</th>
+        	<th>
+         		Pris
+        	</th>
+        	<th>
+        		Antal   
+        	</th>
 		<th>
-          Sum 
-    	</th>	
+          		Sum 
+    		</th>	
 	</tr>
 	<c:forEach items="${orderForm.orderItemList}" var="myitem" varStatus="status">
 	<c:if test="${myitem.isValidate}">
