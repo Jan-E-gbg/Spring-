@@ -1,0 +1,18 @@
+@RestController
+@EnableWebMvc
+public class SourceOfEERestController{
+	
+	@Autowired
+	SourceService sourceService;
+	
+	
+	@RequestMapping(value = "/listAllCompanys" , method = RequestMethod.GET)
+	public ResponseEntity<List<Company>> listAllCompanys() {
+        List<Company> companys = sourceService.getAllCompanys();
+        
+        System.out.println("angular");
+        
+        return new ResponseEntity<List<Company>>(companys, HttpStatus.OK);
+    }
+
+}
