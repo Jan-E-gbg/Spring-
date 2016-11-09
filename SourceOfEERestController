@@ -14,5 +14,24 @@ public class SourceOfEERestController{
         
         return new ResponseEntity<List<Company>>(companys, HttpStatus.OK);
     }
+    
+    @RequestMapping(value = "/listAllScreenSizes" , method = RequestMethod.GET)
+	public ResponseEntity<List<CompanyCollectionSize>> listAllScreenSizes() {
+		List<CompanyCollectionSize> allScreenSizes = sourceService.getAllScreenSizes();
+		allScreenSizes.add(0, new CompanyCollectionSize("*","All"));
+		
+		System.out.println("angular creenSizes");
+		
+		return new ResponseEntity<List<CompanyCollectionSize>>(allScreenSizes, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/listAllEquipmentsTypes" , method = RequestMethod.GET)
+	public ResponseEntity<List<CompanyCollectionType>> listAllEquipmentTypes() {
+		List<CompanyCollectionType> AllEquipmentsTypes = sourceService.getAllEquipmentsTypes();
+		
+		System.out.println("angular equipmentTypes");
+		
+		return new ResponseEntity<List<CompanyCollectionType>>(AllEquipmentsTypes, HttpStatus.OK);
+	}
 
 }
