@@ -33,5 +33,25 @@ public class SourceOfEERestController{
 		
 		return new ResponseEntity<List<CompanyCollectionType>>(AllEquipmentsTypes, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/listOfSourceEquipment/{company_id}/{modell_size_id}/{modell_type_id}" , method = RequestMethod.GET)
+	public ResponseEntity<List<OrderItem>> listOfSourceEquipment(@PathVariable("company_id") String  company_id ,@PathVariable("modell_size_id") String  modell_size_id,
+			@PathVariable("modell_type_id") String  modell_type_id) {
+		CollectionForm inputForm = new CollectionForm();
+		
+		inputForm.setCompany_id(company_id);
+		inputForm.setModell_size_id(modell_size_id);
+		inputForm.setModell_type_id(modell_type_id);
+		
+		System.out.println("angular company_id " + company_id);
+		System.out.println("angular modell_size_id " + modell_size_id);
+		System.out.println("angular modell_type_id " + modell_type_id);
+		
+		
+		List<OrderItem> listOfSourceEquipments = sourceService.getSourceOfEquipment(inputForm);
+		
+		return new ResponseEntity<List<OrderItem>>(listOfSourceEquipments,HttpStatus.OK);
+		
+	}
 
 }
