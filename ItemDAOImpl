@@ -1,0 +1,40 @@
+public class ItemDAOImpl implements ItemDAO  {
+	
+	
+private JdbcTemplate jdbcTemplate;
+	
+	public ItemDAOImpl(DataSource dataSource) {
+		jdbcTemplate = new JdbcTemplate(dataSource);
+	}
+	
+	@Override
+	
+	public int[][]  insertBatch(final List<OrderItem> orderItem,String tableName){
+		
+		String sql = "INSERT INTO " + tableName +
+				"(product_id, company_name, modell_name, modell_pris, ScreenSize, amountOf  ) VALUES (?, ?, ?, ?, ?, ?)";
+		
+		return jdbcTemplate.batchUpdate(sql, orderItem, orderItem.size(),
+
+                new ParameterizedPreparedStatementSetter<OrderItem>() {
+				@Override        
+				public void setValues(PreparedStatement ps, OrderItem orderItem) throws SQLException {
+						ps.setInt(1,Integer.parseInt(orderItem.getProductId()) );
+                        ps.setString(2,orderItem.getCompanyName() );
+                        ps.setString(3,orderItem.getModellName() );
+                        ps.setInt(4,Integer.parseInt(orderItem.getPrice()));
+                        ps.setString(5,orderItem.getModellScreenSize());
+                        ps.setInt(6,orderItem.getAmountOfInt());  
+                    }		
+           });
+	}
+
+	@Override
+	public void updateAmountOf(int productId, int amountOf, String tableName) {
+		
+		jdbcTemplate.update("update " + tableName +" set amountOf = ? where product_id = ?"
+                , amountOf, productId);	
+	}
+	
+	
+}
