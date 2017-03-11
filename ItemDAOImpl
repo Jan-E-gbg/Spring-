@@ -36,5 +36,14 @@ private JdbcTemplate jdbcTemplate;
                 , amountOf, productId);	
 	}
 	
+	@SuppressWarnings({ "unchecked" })
+	public OrderItem getOrderItem(int productId, String tableName){
+	
+		String sql = "select * from "+ tableName  +" where product_id = ?";
+		OrderItem orderItem = (OrderItem)jdbcTemplate.queryForObject(sql, new Object[] { productId }, new OrderItemMapper());
+
+		return orderItem;
+	}
+	
 	
 }
