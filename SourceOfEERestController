@@ -53,5 +53,31 @@ public class SourceOfEERestController{
 		return new ResponseEntity<List<OrderItem>>(listOfSourceEquipments,HttpStatus.OK);
 		
 	}
+	
+	@RequestMapping(value = "/orderItem/{productId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	    public ResponseEntity<OrderItem> getOrderItem(@PathVariable("productId") long productId) {
+		 
+		 System.out.println("getorder " +productId );
+		 
+		 OrderItem orderItem = sourceService.getOrderItem((int) productId, "search_temp_cust_id");
+		 System.out.println(" sqlprodductid " + orderItem.getProductId());
+		 System.out.println(" sqlmodellname " + orderItem.getModellName());
+		 
+		 
+		 return new ResponseEntity<OrderItem>(orderItem,HttpStatus.OK);
+	 }
+	
+	
+	
+	@RequestMapping(value = "/orderItem/{productId}", method = RequestMethod.PUT)
+	
+	public ResponseEntity <OrderItem> updateItem (@PathVariable("productId") long productId ,@RequestBody OrderItem orderItem){
+		
+		sourceService.updateAmountOf(Integer.parseInt(orderItem.getProductId()), Integer.parseInt(orderItem.getAmountOf()), "search_temp_cust_id");
+		System.out.println("PUT update " + orderItem.getProductId());
+		
+		return new ResponseEntity<OrderItem>(orderItem,HttpStatus.OK); 
+		
+	}
 
 }
