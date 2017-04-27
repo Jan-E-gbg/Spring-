@@ -1,0 +1,10 @@
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_search_temp_table`(in tab_name varchar(20), in amountOf int(11), in product_id int(11)  )
+BEGIN
+
+	
+	SET @s =CONCAT('update ' ,tab_name,  ', (select modell_pris from ' ,tab_name, ' where product_id =' ,product_id,') pris'  ' set amountOf =',amountOf, ',' 'sum = pris.modell_pris * ',amountOf, ' where product_id = ',product_id,';');
+    PREPARE up from @s; 
+    EXECUTE up;
+    DEALLOCATE PREPARE up;
+    		
+END
