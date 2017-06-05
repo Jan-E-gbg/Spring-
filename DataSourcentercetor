@@ -1,0 +1,35 @@
+public class DataSourcentercetor extends HandlerInterceptorAdapter  {
+	
+	private static final Logger log = LoggerFactory.getLogger(DataSourcentercetor.class);
+	@Override 
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
+		
+		log.info("preHandleInfo");
+		String contextPath = request.getServletContext().getContextPath();
+		
+		log.debug("[preHandle] " + contextPath);
+		 
+        // /SpringMVCMultiDS/login
+        String prefixLogin = contextPath + "/login";
+        
+        // /SpringMVCMultiDS/search
+        String prefixSearch = contextPath + "/search";
+		
+        String uri = request.getRequestURI();
+        System.out.println("URI:"+ uri);
+        
+        if(uri.startsWith(prefixLogin)) {
+            request.setAttribute("keyDS", "LOGIN_DS");
+        }
+        
+        else if(uri.startsWith(prefixSearch)) {
+            request.setAttribute("keyDS", "SEARCH_DS");
+        }
+		
+		
+		return true;
+	}
+	
+
+}
