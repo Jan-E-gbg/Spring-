@@ -1,0 +1,16 @@
+@Component
+public class AuthenticationFacade implements IAuthenticationFacade {
+
+	
+	public AuthenticationFacade() {
+        super();
+}
+	
+	
+	public final Authentication getAuthentication() {
+		// TODO Auto-generated method stub
+		return SecurityContextHolder.getContext().getAuthentication();
+	}
+	
+
+}
